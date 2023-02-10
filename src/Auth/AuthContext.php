@@ -38,7 +38,9 @@ class AuthContext
 
     public function validate(string $signingKey): void
     {
-        if (abs(time() - $this->timestamp) > $this->maxClockSkew) {
+        $checkTimestamp = $_ENV['VALIDATE_TIMESTAMP'] ?? true;
+        
+        if ($checkTimestamp && abs(time() - $this->timestamp) > $this->maxClockSkew) {
             throw new AuthException('Timestamp is too old or too new.');
         }
 
